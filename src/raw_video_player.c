@@ -40,6 +40,8 @@ int get_SDL_pixfmt(int fmt)
 			return SDL_PIXELFORMAT_BGR565;
 		case 8:
 			return SDL_PIXELFORMAT_RGB332;
+		case 9:
+			return SDL_PIXELFORMAT_UNKNOWN;
 		default:
 			return -1;
 	}
@@ -73,6 +75,7 @@ int main(int argc, char **argv )
 	FILE *fp;
 	char *frame = NULL;
 	int fps = 0, delay = 0;
+	int kill = 0;
 
 	if(argc != 2) {
 		printf("Usage: %s <video_file.raw>\n", argv[0]);
@@ -93,6 +96,7 @@ int main(int argc, char **argv )
 	printf("\t6 : RGB565\n");
 	printf("\t7 : BGR565\n");
 	printf("\t8 : RGB332\n");
+	printf("\t9 : UNKNOWN\n");
 	printf("Enter the video format : ");
 	if(scanf(" %d", &format) < 0) {
 		return -1;
@@ -123,7 +127,6 @@ int main(int argc, char **argv )
 	if(scanf(" %d", &fps) < 0) {
 		return -1;
 	}
-
 	delay = 1000000/(fps+15);
 	snprintf(resolution, 50, "Raw Video Player : %dx%d", width, height);
 	frame = (char *)calloc(1, width*height*bpp);
@@ -168,8 +171,17 @@ int main(int argc, char **argv )
 		if (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT) {
 				break;
+			} else if(e.key.type == SDL_KEYUP) {
+				switch(e.key.keysym.sym) {
+					case SDLK_ESCAPE:/* exit on Esc */
+						kill = 1;
+						break;
+					default:
+						break;
+				}
 			}
 		}
+		if(kill) break;
 		SDL_UpdateTexture(texture,
 				0,
 				frame,
