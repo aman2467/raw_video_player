@@ -160,13 +160,8 @@ int main(int argc, char **argv )
 		SDL_Event e;
 
 		if(fread(frame, 1, width*height*bpp, fp) < width*height*bpp) {
-			fclose(fp);
-			fp = fopen(argv[1], "rb");
-			if(fp == NULL) {
-				perror("fopen");
-				return -1;
-			}
-			if(fread(frame, 1, width*height*bpp, fp) < width*height*bpp);
+			rewind(fp);
+			continue;
 		}
 		if (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT) {
