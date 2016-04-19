@@ -1,6 +1,6 @@
 # Raw_video_player
 Raw video Player for Linux platform
-# Supported Format 
+# Supported Format
 1. YUY2
 2. YV12
 3. IYUV

@@ -1,4 +1,4 @@
-/* ==========================================================================
+/*
  * @file    : raw_video_player.c
  *
  * @description : This file contains the code of raw video player.
@@ -6,11 +6,11 @@
  * @author  : Aman Kumar (2015)
  *
  * @copyright   : The code contained herein is licensed under the GNU General
- *				Public License. You may obtain a copy of the GNU General
- *				Public License Version 2 or later at the following locations:
+ *		Public License. You may obtain a copy of the GNU General
+ *		Public License Version 2 or later at the following locations:
  *              http://www.opensource.org/licenses/gpl-license.html
  *              http://www.gnu.org/copyleft/gpl.html
- * ========================================================================*/
+ */
 
 #include <stdio.h>
 #include <unistd.h>
@@ -23,27 +23,28 @@
 
 int get_SDL_pixfmt(int fmt)
 {
-	switch(fmt) {
-		case 1:
-			return SDL_PIXELFORMAT_YUY2;
-		case 2:
-			return SDL_PIXELFORMAT_YV12;
-		case 3:
-			return SDL_PIXELFORMAT_IYUV;
-		case 4:
-			return SDL_PIXELFORMAT_UYVY;
-		case 5:
-			return SDL_PIXELFORMAT_YVYU;
-		case 6:
-			return SDL_PIXELFORMAT_RGB565;
-		case 7:
-			return SDL_PIXELFORMAT_BGR565;
-		case 8:
-			return SDL_PIXELFORMAT_RGB332;
-		case 9:
-			return SDL_PIXELFORMAT_UNKNOWN;
-		default:
-			return -1;
+	switch (fmt) {
+	case 1:
+		return SDL_PIXELFORMAT_YUY2;
+	case 2:
+		return SDL_PIXELFORMAT_YV12;
+	case 3:
+		return SDL_PIXELFORMAT_IYUV;
+	case 4:
+		return SDL_PIXELFORMAT_UYVY;
+	case 5:
+		return SDL_PIXELFORMAT_YVYU;
+	case 6:
+		return SDL_PIXELFORMAT_RGB565;
+	case 7:
+		return SDL_PIXELFORMAT_BGR565;
+	case 8:
+		return SDL_PIXELFORMAT_RGB332;
+	case 0:
+	case 9:
+		return SDL_PIXELFORMAT_UNKNOWN;
+	default:
+		return -1;
 	}
 }
 
@@ -64,7 +65,7 @@ int validPath(char *path)
  * @arg  : command line arg
  * @return     : success/failure
  * *************************************************************************/
-int main(int argc, char **argv )
+int main(int argc, char **argv)
 {
 	SDL_Window *win = NULL;
 	SDL_Renderer *renderer = NULL;
@@ -77,17 +78,18 @@ int main(int argc, char **argv )
 	int fps = 0, delay = 0;
 	int kill = 0;
 
-	if(argc != 2) {
+	if (argc != 2) {
 		printf("Usage: %s <video_file.raw>\n", argv[0]);
 		exit(0);
 	}
 
-	if(!validPath(argv[1])) {
+	if (!validPath(argv[1])) {
 		printf("Invalid File\n");
 		return -1;
 	}
 
 	printf("Supported Format::\n");
+	printf("\t0 : Y_only /* Not supported at the moment */\n");
 	printf("\t1 : YUY2\n");
 	printf("\t2 : YV12\n");
 	printf("\t3 : IYUV\n");
@@ -98,49 +100,45 @@ int main(int argc, char **argv )
 	printf("\t8 : RGB332\n");
 	printf("\t9 : UNKNOWN\n");
 	printf("Enter the video format : ");
-	if(scanf(" %d", &format) < 0) {
+	if (scanf(" %d", &format) < 0)
 		return -1;
-	}
 
 	format = get_SDL_pixfmt(format);
-	if(format < 0) {
+	if (format < 0) {
 		printf("Error : Invalid Format\n");
 		return -1;
 	}
 
 	printf("Pixel depth(No. of bytes per pixel) : ");
-	if(scanf(" %d", &bpp) < 0) {
+	if (scanf(" %d", &bpp) < 0)
 		return -1;
-	}
 
 	printf("Width of the video : ");
-	if(scanf(" %d", &width) < 0) {
+	if (scanf(" %d", &width) < 0)
 		return -1;
-	}
 
 	printf("Height of the video : ");
-	if(scanf(" %d", &height) < 0) {
+	if (scanf(" %d", &height) < 0)
 		return -1;
-	}
 
 	printf("Frame Per Second(FPS) : ");
-	if(scanf(" %d", &fps) < 0) {
+	if (scanf(" %d", &fps) < 0)
 		return -1;
-	}
+
 	delay = 1000000/(fps+15);
 	snprintf(resolution, 50, "Raw Video Player : %dx%d", width, height);
 	frame = (char *)calloc(1, width*height*bpp);
-	if(!frame) {
+	if (!frame) {
 		printf("Failed to allocate frame\n");
 		return -1;
 	}
 
 	SDL_Init(SDL_INIT_VIDEO);
-	win = SDL_CreateWindow(resolution, 
-			SDL_WINDOWPOS_CENTERED, 
-			SDL_WINDOWPOS_CENTERED, 
-			width, 
-			height, 
+	win = SDL_CreateWindow(resolution,
+			SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED,
+			width,
+			height,
 			SDL_WINDOW_RESIZABLE);
 
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
@@ -150,8 +148,8 @@ int main(int argc, char **argv )
 			width,
 			height);
 
-	fp = fopen(argv[1],"rb");
-	if(fp == NULL) {
+	fp = fopen(argv[1], "rb");
+	if (fp == NULL) {
 		perror("fopen");
 		return -1;
 	}
@@ -159,24 +157,25 @@ int main(int argc, char **argv )
 	while (1) {
 		SDL_Event e;
 
-		if(fread(frame, 1, width*height*bpp, fp) < width*height*bpp) {
+		if (fread(frame, 1, width*height*bpp, fp) < width*height*bpp) {
 			rewind(fp);
 			continue;
 		}
 		if (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT) {
 				break;
-			} else if(e.key.type == SDL_KEYUP) {
-				switch(e.key.keysym.sym) {
-					case SDLK_ESCAPE:/* exit on Esc */
-						kill = 1;
-						break;
-					default:
-						break;
+			} else if (e.key.type == SDL_KEYUP) {
+				switch (e.key.keysym.sym) {
+				case SDLK_ESCAPE:/* exit on Esc */
+					kill = 1;
+					break;
+				default:
+					break;
 				}
 			}
 		}
-		if(kill) break;
+		if (kill)
+			break;
 		SDL_UpdateTexture(texture,
 				0,
 				frame,

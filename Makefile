@@ -41,18 +41,18 @@ player:
 
 clean:
 	${VERBOSE}rm -f $(BIN_DIR)/*
-	${VERBOSE}echo "All Binaries ${RED}removed${NONE}"
+	${VERBOSE}echo -e "All Binaries ${RED}removed${NONE}"
 
 info:
-	${VERBOSE}echo "                                         ${YELLOW}<<#|#>> "
-	${VERBOSE}echo "                                         -(${RED}o o${YELLOW})-${NONE}"
-	${VERBOSE}echo "${CYAN}======================================${YELLOW}oOO${CYAN}==${YELLOW}(${RED}^${YELLOW})${CYAN}==${YELLOW}OOo${CYAN}=====================================${NONE}"
-	${VERBOSE}echo " "
-	${VERBOSE}echo "${YELLOW}Binary Path :" 
-	${VERBOSE}echo "        ${GREEN}${BIN_DIR}/${NONE}"
-	${VERBOSE}echo "${YELLOW}Binaries :"
-	${VERBOSE}echo "        ${GREEN}1. ${TARGET}${NONE}"
-	${VERBOSE}echo " "
-	${VERBOSE}echo "${CYAN}========================================================================================"
-	${VERBOSE}echo " "
+	${VERBOSE}echo -e "                                         ${YELLOW}<<#|#>> "
+	${VERBOSE}echo -e "                                         -(${RED}o o${YELLOW})-${NONE}"
+	${VERBOSE}echo -e "${CYAN}======================================${YELLOW}oOO${CYAN}==${YELLOW}(${RED}^${YELLOW})${CYAN}==${YELLOW}OOo${CYAN}=====================================${NONE}"
+	${VERBOSE}echo -e " "
+	${VERBOSE}echo -e "${YELLOW}Binary Path :"
+	${VERBOSE}echo -e "        ${GREEN}${BIN_DIR}/${NONE}"
+	${VERBOSE}echo -e "${YELLOW}Binaries :"
+	${VERBOSE}echo -e "        ${GREEN}1. ${TARGET}${NONE}"
+	${VERBOSE}echo -e " "
+	${VERBOSE}echo -e "${CYAN}========================================================================================"
+	${VERBOSE}echo -e " "
 
